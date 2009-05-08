@@ -1,6 +1,7 @@
 <cfcomponent displayname="Image Service" hint="Image service" extends="com.gallery.services.BaseService" output="false">
 	<cfscript>
 	variables.imagesDAO = application.gallery.imagesDAO;
+	variables.tempFilePath = ExpandPath('/') & 'temp';
 	</cfscript>
 	
 		
@@ -108,12 +109,23 @@
 		var local = {};
 		local.divisor = arguments.originalHeight / arguments.targetHeight;
 		local.newWidth = arguments.originalWidth / local.divisor;
+		local.tempFileName = CreateUUID() & '.' & arguments.imageFormat;
+		local.pathToTempFile = variables.tempFilePath & '/' & local.tempFileName;
 		</cfscript>
 		
-		<cfimage action="read" source="#arguments.originalImage#" name="local.newImage" format="#arguments.imageFormat#"/>
+		<cfif NOT DirectoryExists(variables.tempFilePath)>
+			<cfdirectory action="create" directory="#variables.tempFilePath#"/>
+		</cfif>
 		
-		<cfimage action="resize" source="#local.newImage#" name="local.newImage"
+		<cfimage action="read" source="#arguments.originalImage#" name="local.newImage"/>
+		
+		<cfimage action="write" source="#local.newImage#" format="#arguments.imageFormat#" destination="#local.pathToTempFile#"/>
+		
+		<cfimage action="resize" source="#local.pathToTempFile#" name="local.newImage"
 				height="#arguments.targetHeight#" width="#local.newWidth#"/>
+		
+		<!--- delete the temp image file --->
+		<cffile action="delete" file="#local.pathToTempFile#"/>
 		
 		<cfscript>
 		local.sNewImage = {};

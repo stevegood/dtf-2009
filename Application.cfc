@@ -1,12 +1,12 @@
 <cfcomponent output="false">
 	<cfscript>
 	THIS.name = 'dallastechfest_session';
-	THIS.mappings['/'] = ExpandPath('/dallasTechFest/');
 	</cfscript>
 	
 	<cffunction name="onApplicationStart">
 		<cfscript>
 		cacheCFCs();
+		application.init = 1;
 		</cfscript>
 	</cffunction>
 	
@@ -14,6 +14,7 @@
 		<cfif isDefined('url.reinit')>
 			<cfscript>
 			cacheCFCs();
+			application.init = 1;
 			</cfscript>
 		</cfif>
 	</cffunction>

@@ -1,5 +1,5 @@
-var endpoint = 'http://mbp:8321/';
-var facadePath = 'dallasTechFest/com/gallery/facades/';
+var endpoint = 'http://localhost:8301/';
+var facadePath = 'com/gallery/facades/';
 var imageFacade = 'ImageFacade.cfc?callback=?';
 var albumFacade = 'AlbumFacade.cfc?callback=?';
 
