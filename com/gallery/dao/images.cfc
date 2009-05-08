@@ -62,4 +62,52 @@
 		
 		<cfreturn />
 	</cffunction>
+
+	<cffunction name="create" displayname="Create" hint="Creates a new images record" access="public" output="false" returntype="void">
+		<cfargument name="imageData" type="binary" required="true" hint="binary image data"/>
+		<cfargument name="fileName" type="string" required="true" hint="name of the image file"/>
+		<cfargument name="imageName" type="string" required="true" hint="name of the image"/>
+		<cfargument name="imageDesc" type="string" required="true" hint="Image description"/>
+		<cfargument name="imageHeight" type="numeric" required="true" hint="Image height"/>
+		<cfargument name="imageWidth" type="numeric" required="true" hint="Image width"/>
+		<cfargument name="albumID" type="numeric" required="true" hint="What album does this image belong to?"/>
+		
+		<cfscript>
+		var local = {};
+		
+		// if the fileName is longer than 50 characters save the extension and shorten the fileName to 46 characters
+		local.fileName = arguments.fileName;
+		if (Len(local.fileName) > 50){
+			local.extension = '.' & ListLast(local.fileName,'.');
+			local.fileName = trim(Left(Replace(local.fileName,local.extension,'','ALL'),46)) & local.extension;
+		}
+		
+		// if imageName is longer than 50 characters truncate to left 50 characters
+		local.imageName = arguments.imageName;
+		if (Len(local.imageName) > 50){
+			local.imageName = Left(local.imageName,50);
+		}
+		
+		// if imageDesc is longer than 255 characters truncate to left 255 characters
+		local.imageDesc = arguments.imageDesc;
+		if (Len(local.imageDesc) > 255){
+			local.imageDesc Left(local.imageDesc,255);
+		}
+		</cfscript>
+		
+		<cfquery datasource="#variables.datasource#">
+		INSERT INTO images (fileName, displayName, description, data, height, width, albumid)
+		VALUES (
+					<cfqueryparam value="#local.fileName#" cfsqltype="cf_sql_varchar" maxlength="50"/>,
+					<cfqueryparam value="#local.imageName#" cfsqltype="cf_sql_varchar" maxlength="50"/>,
+					<cfqueryparam value="#local.imageDesc#" cfsqltype="cf_sql_varchar" maxlength="255"/>,
+					<cfqueryparam value="#arguments.imageData#" cfsqltype="cf_sql_blob"/>,
+					<cfqueryparam value="#arguments.imageHeight#" cfsqltype="cf_sql_integer"/>,
+					<cfqueryparam value="#arguments.imageWidth#" cfsqltype="cf_sql_integer"/>,
+					<cfqueryparam value="#arguments.albumID#" cfsqltype="cf_sql_integer"/>
+				)
+		</cfquery>
+		
+		<cfreturn />
+	</cffunction>
 </cfcomponent>

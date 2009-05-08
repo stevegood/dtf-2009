@@ -36,4 +36,25 @@
 		
 		<cfreturn local.theImageArray />
 	</cffunction>
+
+	<cffunction name="addImage" displayname="Add image" hint="Adds an image to an album" access="remote" output="false" returntype="string">
+		<cfargument name="callback" type="string" required="false" default=""/>
+		
+		<cfscript>
+		var local = {};
+		local.result = {};
+		local.result['success'] = true;
+		if (arguments.callback NEQ ""){
+			local.result = serializeToJSONp(arguments.callback, local.result);
+		}
+		</cfscript>
+		
+		<cfsavecontent variable="local.result">
+			<cfoutput>
+				#local.result#
+			</cfoutput>
+		</cfsavecontent>
+		
+		<cfreturn local.result />
+	</cffunction>
 </cfcomponent>

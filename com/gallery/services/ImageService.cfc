@@ -168,4 +168,7 @@
 		
 		<cfreturn local.output />
 	</cffunction>
+
+	<cffunction name="newImage" displayname="New Image" access="public" output="false" returntype="void" hint="adds a new image to an album">
+	</cffunction>
 </cfcomponent>
