@@ -4,12 +4,14 @@ var imageFacade = 'ImageFacade.cfc?callback=?';
 var albumFacade = 'AlbumFacade.cfc?callback=?';
 
 var selectedAlbumID = 0;
+var selectedImageID = 0;
 
 $(document).ready(function(){
 	// setup app defaults
 	$('#edit-album-link').hide();
 	$('#delete-album-link').hide();
 	$('#add-edit-window').jqm({modal: true});
+	$('#add-image-window').jqm({modal:true});
 	
 	// go grab the albums
 	getAllAlbums();
@@ -20,9 +22,12 @@ $(document).ready(function(){
 		if (id == 0){
 			$('#edit-album-link').hide();
 			$('#delete-album-link').hide();
+			$('#image-nav').hide();
+			$('#image-preview').hide();
 		} else {
 			$('#edit-album-link').show();
 			$('#delete-album-link').show();
+			$('#image-preview').animate({opacity: 'hide'},500);
 		}
 		
 		selectedAlbumID = id;
@@ -70,8 +75,20 @@ $(document).ready(function(){
 	});
 	
 	$('#new-image-link').click(function(){
-		
+		onNewImageLinkClick();
 	});
+	
+	$('.thumbnail').live('click',function(){
+		var id = $(this).data('image').id;
+		onThumbnailClick(id);
+	});
+	
+	$('#aiw-close-link').click(function(){
+		onAIWClose();
+	});
+	$('#aiw-cancel').click(function(){
+		onAIWClose();
+	})
 });
 
 function getAllAlbums(){
@@ -120,15 +137,21 @@ function onAlbumChange(id){
 function getAlbum(id){
 	var url = endpoint + facadePath + imageFacade;
 	var args = {method: 'getAlbumImages', returnFormat: 'plain', albumID: id};
+	$('#image-nav').show();
 	$.getJSON(
 		url,
 		args,
 		function(result){
 			var html = '';
 			for (var i = 0; i < result.length; i++){
-				html += '<img src="' + result[i].base64 + '" height="' + result[i].height + '" width="' + result[i].width + '"/><br/>';
+				html += '<img id="tumbnail-' + result[i].id + '" class="thumbnail" src="' + result[i].base64 + '" height="' + result[i].height + '" width="' + result[i].width + '"/><br/>';
 			}
 			$('#album').html(html).animate({opacity:'show'}, 500);
+			
+			for (var i = 0; i< result.length; i++){
+				var target = '#tumbnail-' + result[i].id;
+				$(target).data('image',result[i]);
+			}
 		}
 	);
 };
@@ -219,4 +242,42 @@ function editAlbum(id, name, description){
 			getAllAlbums();
 		}
 	);
+};
+
+function onThumbnailClick(id){
+	if (id != selectedImageID){
+		selectedImageID = id;
+		$('#image-preview').animate({opacity: 'hide'},500);
+		var url = endpoint + facadePath + imageFacade;
+		var args = {
+						method: 'getImage',
+						returnFormat: 'plain',
+						imageID: id
+					};
+		$.getJSON(
+			url,
+			args,
+			function(result){
+				var html = '<img src="' + result.base64 + '" height="' + result.height + 'px" width="' + result.width + 'px" />';
+				$('#image-preview').html(html);
+				$('#image-preview').animate({opacity: 'show'},500);
+			}
+		);
+	}
+};
+
+function onNewImageLinkClick(){
+	resetImageEditor();
+	$('#add-image-window').jqmShow();
+};
+
+function resetImageEditor(){
+	$('#aiw-image-id').val(0);
+	$('#aiw-name-input').val('');
+	$('#aiw-description-input').val('');
+};
+
+function onAIWClose(){
+	resetImageEditor();
+	$('#add-image-window').jqmHide();
 };

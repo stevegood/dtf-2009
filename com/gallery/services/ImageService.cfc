@@ -1,15 +1,30 @@
 <cfcomponent displayname="Image Service" hint="Image service" extends="com.gallery.services.BaseService" output="false">
 	<cfscript>
 	variables.imagesDAO = application.gallery.imagesDAO;
-	variables.tempFilePath = ExpandPath('/') & 'temp';
+	variables.tempFilePath = '';
 	</cfscript>
 	
 		
 	<cffunction name="init" displayname="init" hint="psuedo constructor" access="public" output="false" returntype="ImageService">
+		<cfargument name="thePath" type="string" required="false" default="#ExpandPath('/')#temp">
 		<cfset super.init() />
+		<cfscript>
+		super.init();
+		setTempFilePath(arguments.thePath);
+		</cfscript>
 		<cfreturn this />
 	</cffunction>
-
+	
+	<cffunction name="setTempFilePath" access="public" hint="setter for variables.tempFilePath" output="false" returntype="void">
+		<cfargument name="thePath" type="string" required="true"/>
+		<cfset variables.tempFilePath = arguments.thePath />
+		<cfreturn />
+	</cffunction>
+	
+	<cffunction name="getTempFilePath" access="public" hint="getter for variables.tempFilePath" output="false" returntype="string">
+		<cfreturn variables.tempFilePath />
+	</cffunction>
+	
 	<cffunction name="getImageByID" displayname="Get Image By ID" hint="Returns a struct containing image data" access="public" output="false" returntype="Any">
 		<cfargument name="imageID" displayName="Image ID" type="numeric" hint="the numeric ID of the image to return" required="true" />
 		
@@ -51,7 +66,7 @@
 			local.ctr = local.ctr + 1;
 			
 			// create a thumbnail of the image
-			local.thumbStruct = makeThumbnail(data, height, width, ListLast(fileName,'.'), 75);
+			local.thumbStruct = makeThumbnail(data, height, width, ListLast(fileName,'.'), 50);
 			
 			local.args['id'] = id;
 			local.args['fileName'] = fileName;
@@ -110,11 +125,11 @@
 		local.divisor = arguments.originalHeight / arguments.targetHeight;
 		local.newWidth = arguments.originalWidth / local.divisor;
 		local.tempFileName = CreateUUID() & '.' & arguments.imageFormat;
-		local.pathToTempFile = variables.tempFilePath & '/' & local.tempFileName;
+		local.pathToTempFile = getTempFilePath() & '/' & local.tempFileName;
 		</cfscript>
 		
-		<cfif NOT DirectoryExists(variables.tempFilePath)>
-			<cfdirectory action="create" directory="#variables.tempFilePath#"/>
+		<cfif NOT DirectoryExists(getTempFilePath())>
+			<cfdirectory action="create" directory="#getTempFilePath()#"/>
 		</cfif>
 		
 		<cfimage action="read" source="#arguments.originalImage#" name="local.newImage"/>
@@ -144,7 +159,7 @@
 		<cfscript>
 		var local = {};
 		local.outputFileName = CreateUUID() & '.txt';
-		local.tempDirectory = ExpandPath('/') & 'temp/';
+		local.tempDirectory = getTempFilePath() & '/';
 		local.filePath = local.tempDirectory & local.outputFileName;
 		</cfscript>
 		

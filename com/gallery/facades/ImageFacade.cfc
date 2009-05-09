@@ -12,7 +12,7 @@
 		local.theImage = variables.imageService.getImageByID(arguments.imageID);
 		if (arguments.callback NEQ ""){
 			local.theImage.data = "";
-			local.theImage = serializeToJSONp(local.theImage);
+			local.theImage = serializeToJSONp(arguments.callback, local.theImage);
 		}
 		</cfscript>
 

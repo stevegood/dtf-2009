@@ -80,3 +80,30 @@ body {
 	margin-top: 21px;
 	clear: both;
 }
+
+/* add-image-window styles */
+#add-image-window {
+	width: 300px;
+}
+#add-image-window td {
+	color: #FFFFFF;
+}
+#add-image-window a {
+	color:#FFFFFF;
+	font-weight:bold;
+}
+#aiw-title {
+	float:left;
+}
+#aiw-close-link {
+	float:right;
+}
+#aiw-body {
+	margin-top:21px;
+	clear:both;
+}
+
+.thumbnail {
+	cursor: pointer;
+}
+
