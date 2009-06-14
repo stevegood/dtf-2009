@@ -211,9 +211,16 @@ $(document).ready(function(){
 			'scriptData': {'method': 'addImage', 'albumID': selectedAlbumID, 'returnFormat': 'json'},
 			'displayData': 'percentage',
 			onComplete: function(event, queueID, fileObj, response){
+				var args = {
+							method: 'updateImageDetail',
+							id: response,
+							displayName: $('#aiw-name-input').val(),
+							description: $('#aiw-description-input').val(),
+							returnFormat: 'json'
+						   }
 				$.getJSON(
 					source + imageFacade,
-					{method: 'updateImageDetail', id: response, displayName: $('#aiw-name-input').val(), description: $('#aiw-description-input').val()},
+					args,
 					function(result){
 						$('#add-image-window').jqmHide();
 						$('#album-select').change();
