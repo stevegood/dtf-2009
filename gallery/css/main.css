@@ -107,3 +107,11 @@ body {
 	cursor: pointer;
 }
 
+#aiw-body th {
+	color: #fefbff;
+}
+
+#aiw-body td {
+	color: black;
+}
+

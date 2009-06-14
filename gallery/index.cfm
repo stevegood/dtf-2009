@@ -12,9 +12,10 @@
 		<link rel="stylesheet" href="css/black-tie/jquery-ui-1.7.custom.css" media="screen, projection" />
 		<link rel="stylesheet" href="./css/main.css" type="text/css" media="screen" />
 		
-		<script src="./js/jquery-1.3.2.min.js" type="text/javascript"></script>
-		<script src="./js/jquery-ui-1.7.custom.min.js" type="text/javascript"></script>
-		<script src="./js/jquery.jqModal.js" type="text/javascript"></script>
+		<script src="js/jquery-1.3.2.min.js" type="text/javascript"></script>
+		<script src="js/jquery-ui-1.7.custom.min.js" type="text/javascript"></script>
+		<script src="js/jquery.jqModal.js" type="text/javascript"></script>
+		<script src="js/uploadify/jquery.uploadify.js" type="text/javascript"></script>
 		<script src="./js/main.js" type="text/javascript"></script>
 	</head>
 	
@@ -38,6 +39,7 @@
 			<div id="image-preview" class="hidden"></div>
 		</div>
 		
+		<div id="debug-box"></div>
 		
 		<!-- modal window for adding / editing an album. Hidden by default -->
 		<div id="add-edit-window" class="jqmWindow">
@@ -80,19 +82,25 @@
 			<div id="aiw-body">
 				<table>
 					<tr>
-						<td style="text-align:right;">Name:</td>
-						<td>
+						<th align="right">Name:</th>
+						<td align="left">
 							<input type="text" id="aiw-name-input" style="width:100%;" />
 						</td>
 					</tr>
 					<tr>
-						<td style="text-align:right;">Description:</td>
-						<td>
+						<th align="right">Description:</th>
+						<td align="left">
 							<input type="text" id="aiw-description-input" style="width:100%;" />
 						</td>
 					</tr>
 					<tr>
-						<td colspan="2" style="text-align:right;">
+						<th align="right">Image:</th>
+						<td align="left" class="image-file">
+							
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" align="right">
 							<input type="button" id="aiw-submit" value="Save" />
 							<input type="button" id="aiw-cancel" value="Cancel" />
 						</td>

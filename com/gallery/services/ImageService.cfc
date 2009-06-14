@@ -102,7 +102,7 @@
 		local.image['fileName'] = arguments.fileName;
 		local.image['format'] = ListLast(arguments.fileName,'.');
 		local.image['displayName'] = arguments.displayName;
-		local.image['data'] = arguments.data;
+		//local.image['data'] = arguments.data;
 		local.image['base64'] = blobToBase64(local.image.format, arguments.data);
 		local.image['height'] = arguments.height;
 		local.image['width'] = arguments.width;
@@ -184,6 +184,44 @@
 		<cfreturn local.output />
 	</cffunction>
 
-	<cffunction name="newImage" displayname="New Image" access="public" output="false" returntype="void" hint="adds a new image to an album">
+	<cffunction name="newImage" displayname="New Image" access="public" output="false" returntype="any" hint="adds a new image to an album">
+		<cfargument name="filedata" type="string" required="true"/>
+		<cfargument name="filename" type="string" required="true"/>
+		<cfargument name="folder" type="string" required="true"/>
+		<cfargument name="albumid" type="numeric" required="true"/>
+		
+		<cfscript>
+		var local = {};
+		</cfscript>
+		
+		<cffile action="readbinary" file="#arguments.filedata#" variable="local.theFile">
+		<cfimage action="read" source="#local.theFile#" name="local.theImage" />
+		
+		<cfsavecontent variable="local.content">
+			<cfdump var="#local.theImage#">
+		</cfsavecontent>
+		
+		<cfscript>
+		local.image.imageData = local.theFile;
+		local.image.imageFileName = arguments.filename;
+		local.image.imageAlbumid = arguments.albumid;
+		local.image.imageHeight = local.theImage.height;
+		local.image.imageWidth = local.theImage.width;
+		local.qImage = variables.imagesDAO.create(ArgumentCollection = local.image);
+		local.imageid = local.qImage.id;
+		</cfscript>
+		
+		<cfreturn local.imageid />
 	</cffunction>
+	
+	<cffunction name="updateImageDetail" access="public" returntype="void" output="false">
+		<cfargument name="id" type="numeric" required="true"/>
+		<cfargument name="displayName" type="string" required="false" default=""/>
+		<cfargument name="description" type="string" required="false" default=""/>
+		
+		<cfset variables.imagesDAO.updateImageDetail(ArgumentCollection = arguments) />
+		
+		<cfreturn />
+	</cffunction>
+	
 </cfcomponent>
