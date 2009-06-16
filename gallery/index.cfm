@@ -79,6 +79,12 @@
 			<div id="aiw-body">
 				<table>
 					<tr>
+						<th align="right">Image:</th>
+						<td align="left" class="image-file">
+							
+						</td>
+					</tr>
+					<tr>
 						<th align="right">Name:</th>
 						<td align="left">
 							<input type="text" id="aiw-name-input" style="width:100%;" />
@@ -88,12 +94,6 @@
 						<th align="right">Description:</th>
 						<td align="left">
 							<input type="text" id="aiw-description-input" style="width:100%;" />
-						</td>
-					</tr>
-					<tr>
-						<th align="right">Image:</th>
-						<td align="left" class="image-file">
-							
 						</td>
 					</tr>
 					<tr>
