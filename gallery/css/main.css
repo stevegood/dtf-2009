@@ -16,17 +16,17 @@ body {
 #album {
 	float: left;
 }
-#image-preview {
-	background-color: #333333;
-}
+
 #image-preview-title {
 	float:left;
+	vertical-align:middle;
 	padding:3px;
 	color:#FFFFFF;
 	font-weight:bold;
 }
 #image-preview-close {
 	float:right;
+	vertical-align:middle;
 	cursor:pointer;
 	color:#FFFFFF;
 	font-weight:bold;
@@ -34,8 +34,12 @@ body {
 }
 #image-preview-description {
 	clear:both;
+	border-top:3px dashed #000000;
+	margin-top:5px;
+	padding:5px;
 }
 #image-preview-display {
+	margin-top:3px;
 	text-align:center;
 }
 #image-preview-display img {
