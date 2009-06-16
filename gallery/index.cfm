@@ -36,10 +36,7 @@
 			</div>
 			<div id="album-description" class="hidden"></div>
 			<div id="album" class="hidden"></div>
-			<div id="image-preview" class="hidden"></div>
 		</div>
-		
-		<div id="debug-box"></div>
 		
 		<!-- modal window for adding / editing an album. Hidden by default -->
 		<div id="add-edit-window" class="jqmWindow">
@@ -107,6 +104,14 @@
 					</tr>
 				</table>
 			</div>
+		</div>
+		
+		<!-- modal window to display image preview -->
+		<div id="image-preview" class="jqmWindow">
+			<div id="image-preview-title"></div>
+			<div id="image-preview-close">[X]</div>
+			<div id="image-preview-description"></div>
+			<div id="image-preview-display"></div>
 		</div>
 	</body>
 

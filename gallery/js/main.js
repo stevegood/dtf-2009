@@ -11,6 +11,7 @@ $(document).ready(function(){
 	$('#delete-album-link').hide();
 	$('#add-edit-window').jqm({modal: true});
 	$('#add-image-window').jqm({modal:true});
+	$('#image-preview').jqm({modal:true});
 	
 	// custom event binds
 	$(document).bind('getAllAlbums',function(){
@@ -86,10 +87,40 @@ $(document).ready(function(){
 					args,
 					function(result){
 						$('#album').html(''); // clear the content
-						for (var i = 0; i < result.length; i++){
+						/*for (var i = 0; i < result.length; i++){
 							var image = $('<img id="tumbnail-' + result[i].id + '" class="thumbnail" src="' + result[i].base64 + '" height="' + result[i].height + '" width="' + result[i].width + '"/><br/>');
 							image.data('image',result[i]);
 							$('#album').append(image);
+						}
+						$('#album').animate({opacity:'show'}, 500);*/
+						
+						var rows = result.length / 12;
+						if (rows < 1){
+							rows = 1;
+						}
+						
+						for (var i = 0; i < rows; i++){
+							var currentRow = i + 1;
+							var lastImageIndex = -1;
+							var rowDiv = $('<div class="clear span-24 last" id="Gallery-thumb-box">');
+							if (currentRow != rows){
+								for (var n = 0; n < 12; n++){
+									var nx = lastImageIndex + 1;
+									var image = $('<div class="span-2 image-thumb"><img id="thumbnail-' + result[nx].id + '" class="thumbnail" src="' + result[nx].base64 + '" height="' + result[nx].height + '" width="' + result[nx].width + '"/></div>');
+									image.data('image',result[nx]);
+									rowDiv.append(image);
+									lastImageIndex++;
+								}
+							} else {
+								for (var n = 0; n < result.length; n++){
+									var nx = lastImageIndex + 1;
+									var image = $('<div class="span-2 image-thumb"><img id="thumbnail-' + result[nx].id + '" class="thumbnail" src="' + result[nx].base64 + '" height="' + result[nx].height + '" width="' + result[nx].width + '"/></div>');
+									image.data('image',result[nx]);
+									rowDiv.append(image);
+									lastImageIndex++;
+								}
+							}
+							$('#album').append(rowDiv);
 						}
 						$('#album').animate({opacity:'show'}, 500);
 					}
@@ -233,26 +264,25 @@ $(document).ready(function(){
 	});
 	
 	$('.thumbnail').live('click',function(){
-		var id = $(this).data('image').id;
-		if (id != selectedImageID){
-			selectedImageID = id;
-			$('#image-preview').animate({opacity: 'hide'},500);
-			var url = source + imageFacade;
-			var args = {
-							method: 'getImage',
-							returnFormat: 'json',
-							imageID: id
-						};
-			$.getJSON(
-				url,
-				args,
-				function(result){
-					var html = '<img src="' + result.base64 + '" height="' + result.height + 'px" width="' + result.width + 'px" />';
-					$('#image-preview').html(html);
-					$('#image-preview').animate({opacity: 'show'},500);
-				}
-			);
-		}
+		$('#image-preview-display').html('Loading...');
+		$('#image-preview').jqmShow();
+		var id = $(this).attr('id').replace('thumbnail-','');
+		var url = source + imageFacade;
+		var args = {
+						method: 'getImage',
+						returnFormat: 'json',
+						imageID: id
+					};
+		$.getJSON(
+			url,
+			args,
+			function(result){
+				var html = '<img src="' + result.base64 + '" height="' + result.height + 'px" width="' + result.width + 'px" />';
+				$('#image-preview-title').html(result.displayName);
+				$('#image-preview-description').html(result.description);
+				$('#image-preview-display').html(html);
+			}
+		);
 	});
 	
 	$('#aiw-close-link').click(function(){
@@ -263,6 +293,10 @@ $(document).ready(function(){
 	});
 	$('#aiw-submit').click(function(){
 		$('#image-file').fileUploadStart();
+	});
+	
+	$('#image-preview-close').click(function(){
+		$('#image-preview').jqmHide();
 	});
 	
 	// dispatch the getAllAlbums event

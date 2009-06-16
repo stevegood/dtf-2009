@@ -17,7 +17,29 @@ body {
 	float: left;
 }
 #image-preview {
-	float: right;
+	background-color: #333333;
+}
+#image-preview-title {
+	float:left;
+	padding:3px;
+	color:#FFFFFF;
+	font-weight:bold;
+}
+#image-preview-close {
+	float:right;
+	cursor:pointer;
+	color:#FFFFFF;
+	font-weight:bold;
+	padding:3px;
+}
+#image-preview-description {
+	clear:both;
+}
+#image-preview-display {
+	text-align:center;
+}
+#image-preview-display img {
+	margin:auto;
 }
 
 /* jqModal base Styling courtesy of;
@@ -34,8 +56,7 @@ body {
     left: 50%;
     
     margin-left: -300px;
-    width: 500px;
-	//height: 400px;
+    min-width: 500px;
     
     background-color: #333333;
     color: #FFFFFF;
@@ -114,4 +135,11 @@ body {
 #aiw-body td {
 	color: black;
 }
-
+.image-thumb {
+	max-width: 55px;
+	overflow: hidden;
+	text-align:center;
+}
+.image-thumb img {
+	margin:auto;
+}
